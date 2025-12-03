@@ -1,0 +1,24 @@
+# Use an official Node.js runtime as the base image
+FROM node:18-slim
+
+# Install the full Java JDK (which includes javac and java)
+# This happens inside the container, so it doesn't matter what you have on your local machine
+RUN apt-get update && apt-get install -y default-jdk
+
+# Set the working directory inside the container
+WORKDIR /usr/src/app
+
+# Copy package.json and package-lock.json
+COPY package*.json ./
+
+# Install our Node.js app's dependencies
+RUN npm install
+
+# Copy the rest of our backend code into the container
+COPY . .
+
+# The port the app will run on inside the container
+EXPOSE 5000
+
+# The command to run when the container starts
+CMD [ "node", "server.js" ]
